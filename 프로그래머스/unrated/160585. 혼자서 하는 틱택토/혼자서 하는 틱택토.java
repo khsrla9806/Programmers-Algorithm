@@ -1,4 +1,6 @@
 class Solution {
+    private final char O = 'O';
+    private final char X = 'X';
     public int solution(String[] board) {
         int oCnt = 0;
         int xCnt = 0;
@@ -24,84 +26,48 @@ class Solution {
         }
         
         // 게임이 끝났는데 계속 진행된 경우
-        String winner = getWinner(board);
-        if (winner.equals("Error")) {
+        boolean oWin = getWinner(board, O);
+        boolean xWin = getWinner(board, X);
+        if (oWin && xWin) {
             return 0;
         }
-        if (winner.equals("oWin")) {
-            if (oCnt <= xCnt) {
-                return 0;
-            }
+        if (oWin && oCnt <= xCnt) {
+            return 0;
         }
-        if (winner.equals("xWin")) {
-            if (oCnt != xCnt) {
-                return 0;
-            }
+        if (xWin && oCnt != xCnt) {
+            return 0;
         }
         
         return 1;
     }
     
-    public String getWinner(String[] board) {
-        boolean oWin = false;
-        boolean xWin = false;
+    public boolean getWinner(String[] board, char value) {
         for (int i = 0; i < 3; i++) {
             // 가로로 일치하는 경우
-            if (board[i].equals("OOO")) {
-                oWin = true;
+            if (board[i].charAt(0) == value 
+                && board[i].charAt(0) == board[i].charAt(1) 
+                && board[i].charAt(1) == board[i].charAt(2)) {
+                return true;
             }
             // 세로로 일치하는 경우
-            if (board[0].charAt(i) == 'O'
+            if (board[0].charAt(i) == value
                 && board[0].charAt(i) == board[1].charAt(i)
                 && board[1].charAt(i) == board[2].charAt(i)) {
-                oWin = true;
+                return true;
             }
         }
-        
-        if (board[0].charAt(0) == 'O' 
+        // 대각선 일치
+        if (board[0].charAt(0) == value
             && board[0].charAt(0) == board[1].charAt(1)
             && board[1].charAt(1) == board[2].charAt(2)) {
-            oWin = true;
+            return true;
         }
         
-        if (board[0].charAt(2) == 'O'
+        if (board[0].charAt(2) == value
             && board[0].charAt(2) == board[1].charAt(1)
             && board[1].charAt(1) == board[2].charAt(0)) {
-            oWin = true;
+            return true;
         }
-        
-        for (int i = 0; i < 3; i++) {
-            // 가로로 일치하는 경우
-            if (board[i].equals("XXX")) {
-                xWin = true;
-            }
-            // 세로로 일치하는 경우
-            if (board[0].charAt(i) == 'X'
-                && board[0].charAt(i) == board[1].charAt(i)
-                && board[1].charAt(i) == board[2].charAt(i)) {
-                xWin = true;
-            }
-        }
-        
-        if (board[0].charAt(0) == 'X' 
-            && board[0].charAt(0) == board[1].charAt(1)
-            && board[1].charAt(1) == board[2].charAt(2)) {
-            xWin = true;
-        }
-        
-        if (board[0].charAt(2) == 'X'
-            && board[0].charAt(2) == board[1].charAt(1)
-            && board[1].charAt(1) == board[2].charAt(0)) {
-            xWin = true;
-        }
-        
-        if (oWin && xWin) {
-            return "Error";
-        } else if (oWin) {
-            return "oWin";
-        } else if (xWin) {
-            return "xWin";
-        }
-        return "noWin";
+        return false;
     }
 }
