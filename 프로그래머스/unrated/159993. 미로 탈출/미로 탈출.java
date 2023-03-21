@@ -7,28 +7,33 @@ class Solution {
     public int solution(String[] maps) {
         int[] start = {0, 0};
         int[] lever = {0, 0};
+        int[] exit = {0, 0};
         for (int i = 0; i < maps.length; i++) {
-            if (maps[i].contains("S")) {
-                start[0] = i;
-                start[1] = maps[i].indexOf('S');
-            }
-            
-            if (maps[i].contains("L")) {
-                lever[0] = i;
-                lever[1] = maps[i].indexOf('L');
+            for (int j = 0; j < maps[0].length(); j++) {
+                char value = maps[i].charAt(j);
+                if (value == 'S') {
+                    start[0] = i;
+                    start[1] = j;
+                } else if (value == 'L') {
+                    lever[0] = i;
+                    lever[1] = j;
+                } else if (value == 'E') {
+                    exit[0] = i;
+                    exit[1] = j;
+                }
             }
         }
         
         // 레버까지 최소 거리
         flag = new boolean[maps.length][maps[0].length()];
-        int leverDis = bfs(maps, start[0], start[1], 0, 'L');
+        int leverDis = bfs(maps, start[0], start[1], 0, lever);
         if (leverDis == -1) {
             return -1;
         }
         
         // 출구까지 최소 거리
         flag = new boolean[maps.length][maps[0].length()];
-        int exitDis = bfs(maps, lever[0], lever[1], 0, 'E');
+        int exitDis = bfs(maps, lever[0], lever[1], 0, exit);
         if (exitDis == -1) {
             return -1;
         }
@@ -36,14 +41,14 @@ class Solution {
         return leverDis + exitDis;
     }
     
-    public int bfs(String[] maps, int x, int y, int distance, char target) {
+    public int bfs(String[] maps, int x, int y, int distance, int[] target) {
         Queue<int[]> queue = new LinkedList<>();
         queue.add(new int[]{x, y, distance});
         
         while (!queue.isEmpty()) {
             int[] current = queue.poll();
             
-            if (maps[current[0]].charAt(current[1]) == target) {
+            if (current[0] == target[0] && current[1] == target[1]) {
                 return current[2];
             }
             
