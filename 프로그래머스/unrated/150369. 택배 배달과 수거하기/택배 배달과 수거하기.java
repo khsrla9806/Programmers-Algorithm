@@ -1,52 +1,40 @@
-import java.util.Stack;
-
 class Solution {
     public long solution(int cap, int n, int[] deliveries, int[] pickups) {
         long answer = 0;
         
-        Stack<Integer> deliverStack = new Stack<>();
-        Stack<Integer> pickupStack = new Stack<>();
+        int lastDeliver = n;
+        int lastPickup = n;
         
-        for (int i = 1; i <= n; i++) {
-            for (int j = 0; j < deliveries[i - 1]; j++) {
-                deliverStack.add(i);
+        while (lastDeliver >= 1 || lastPickup >= 1) {
+            int load = 0;
+            
+            while (lastDeliver >= 1 && deliveries[lastDeliver - 1] == 0) {
+                lastDeliver--;
+            }
+            while (lastPickup >= 1 && pickups[lastPickup - 1] == 0) {
+                lastPickup--;
             }
             
-            for (int j = 0; j < pickups[i - 1]; j++) {
-                pickupStack.add(i);
-            }
-        }
-        
-        while (!deliverStack.isEmpty() && !pickupStack.isEmpty()) {
-            int lastDeliverHouse = deliverStack.peek();
-            int lastPickupHounse = pickupStack.peek();
+            answer += Math.max(lastDeliver, lastPickup) * 2;
             
-            for (int i = 0; i < cap; i++) {
-                if (!deliverStack.isEmpty()) deliverStack.pop();
-                if (!pickupStack.isEmpty()) pickupStack.pop();
+            while (lastDeliver >= 1 && load < cap) {
+                load += deliveries[lastDeliver - 1];
+                deliveries[lastDeliver - 1] = 0;
+                lastDeliver--;
+            }
+            if (load > cap) {
+                deliveries[lastDeliver++] = load - cap;
             }
             
-            answer += Math.max(lastDeliverHouse, lastPickupHounse) * 2;
-        }
-        
-        while (!deliverStack.isEmpty()) {
-            int lastDeliverHouse = deliverStack.peek();
-            
-            for (int i = 0; i < cap; i++) {
-                if (!deliverStack.isEmpty()) deliverStack.pop();
+            load = 0;
+            while (lastPickup >= 1 && load < cap) {
+                load += pickups[lastPickup - 1];
+                pickups[lastPickup - 1] = 0;
+                lastPickup--;
             }
-            
-            answer += lastDeliverHouse * 2;
-        }
-        
-        while (!pickupStack.isEmpty()) {
-            int lastPickupHounse = pickupStack.peek();
-            
-            for (int i = 0; i < cap; i++) {
-                if (!pickupStack.isEmpty()) pickupStack.pop();
+            if (load > cap) {
+                pickups[lastPickup++] = load - cap;
             }
-            
-            answer += lastPickupHounse * 2;
         }
         
         return answer;
