@@ -3,9 +3,11 @@ class Solution {
         // 강아지의 현재 좌표를 탐색 (시작지점)
         int[] currentPos = {0, 0};
         for (int i = 0; i < park.length; i++) {
-            if (park[i].contains("S")) {
-                currentPos[0] = i;
-                currentPos[1] = park[i].indexOf("S");
+            for (int j = 0; j < park[0].length(); j++) {
+                if (park[i].charAt(j) == 'S') {
+                    currentPos[0] = i;
+                    currentPos[1] = j;
+                }
             }
         }
         
