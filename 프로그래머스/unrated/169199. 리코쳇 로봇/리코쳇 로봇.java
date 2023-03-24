@@ -3,6 +3,7 @@ import java.util.*;
 class Solution {
     static final int[][] MOVE = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
     static int n, m;
+    static int goalX, goalY;
     
     public int solution(String[] board) {
         n = board.length;
@@ -17,6 +18,11 @@ class Solution {
                 if (map[i][j] == 'R') {
                     start[0] = i;
                     start[1] = j;
+                }
+                
+                if (map[i][j] == 'G') {
+                    goalX = i;
+                    goalY = j;
                 }
             }
         }
@@ -58,7 +64,7 @@ class Solution {
                 }
                 
                 // 만약 목표지점에 도달했다면 끝
-                if (board[nX].charAt(nY) == 'G') {
+                if (nX == goalX && nY == goalY) {
                     return cur[2] + 1;
                 }
                 
