@@ -1,14 +1,17 @@
 import java.util.*;
 
 class Solution {
-    private static final int[][] MOVE = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
+    static final int[][] MOVE = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
+    static int n, m;
     
     public int solution(String[] board) {
-        boolean[][] visit = new boolean[board.length][board[0].length()];
+        n = board.length;
+        m = board[0].length();
+        boolean[][] visit = new boolean[n][m];
         int[] start = {0, 0};
         // 시작 지점 찾기
-        for (int i = 0; i < board.length; i++) {
-            for (int j = 0; j < board[0].length(); j++) {
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
                 if (board[i].charAt(j) == 'R') {
                     start[0] = i;
                     start[1] = j;
@@ -39,13 +42,7 @@ class Solution {
                     nX += move[0];
                     nY += move[1];
                     
-                    if (nX < 0 || nX >= board.length || nY < 0 || nY >= board[0].length()) {
-                        nX -= move[0];
-                        nY -= move[1];
-                        break;
-                    }
-                    
-                    if (board[nX].charAt(nY) == 'D') {
+                    if ((nX < 0 || nX >= n || nY < 0 || nY >= m) || board[nX].charAt(nY) == 'D') {
                         nX -= move[0];
                         nY -= move[1];
                         break;
