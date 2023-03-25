@@ -1,3 +1,4 @@
+<img src="https://img.shields.io/badge/-Java-red"> <img src="https://img.shields.io/badge/-Programmers-%2337485D"> <img src="https://img.shields.io/badge/-BaekJoon-%23D7E2EB">
 # 👨🏻‍💻 Algorithm Practice
 
 ### 1️⃣ 매일 한 문제 이상을 풀이합니다.
