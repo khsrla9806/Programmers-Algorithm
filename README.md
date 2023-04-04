@@ -25,4 +25,4 @@
 
 # 🙅🏻‍♂️ 다시 풀어볼 문제
 
-- [ ] [none]()
+- [ ] [백준 14501번(DP)](https://www.acmicpc.net/problem/14501)
