@@ -26,8 +26,10 @@ public class Main {
             }
         });
 
-        words.forEach(word -> {
-            System.out.println(word);
-        });
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < words.size(); i++) {
+            builder.append(words.get(i)).append("\n");
+        }
+        System.out.println(builder);
     }
 }
