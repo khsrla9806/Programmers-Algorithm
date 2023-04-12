@@ -7,16 +7,12 @@ public class Main {
 
         final int N = Integer.parseInt(reader.readLine());
 
-        List<String> words = new ArrayList<>();
+        String[] words = new String[N];
         for (int i = 0; i < N; i++) {
-            String word = reader.readLine();
-            if (words.contains(word)) {
-                continue;
-            }
-            words.add(word);
+            words[i] = reader.readLine();
         }
 
-        Collections.sort(words, new Comparator<String>() {
+        Arrays.sort(words, new Comparator<String>() {
             @Override
             public int compare(String str1, String str2) {
                 if (str1.length() == str2.length()) {
@@ -27,8 +23,10 @@ public class Main {
         });
 
         StringBuilder builder = new StringBuilder();
-        for (int i = 0; i < words.size(); i++) {
-            builder.append(words.get(i)).append("\n");
+        for (int i = 0; i < words.length; i++) {
+            if (i == 0 || !words[i].equals(words[i - 1])) {
+                builder.append(words[i]).append("\n");
+            }
         }
         System.out.println(builder);
     }
