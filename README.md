@@ -27,4 +27,4 @@
 
 - [ ] [백준 14501번](https://www.acmicpc.net/problem/14501)
 - [ ] [백준 14889번](https://www.acmicpc.net/problem/14889)
-- [ ] [None]()
+- [ ] [백준 1654번](https://www.acmicpc.net/problem/1654)
