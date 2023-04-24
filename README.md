@@ -30,6 +30,7 @@
 - [ ] [백준 1654번](https://www.acmicpc.net/problem/1654)
 - [ ] [백준 1655번](https://www.acmicpc.net/problem/1655)
 - [ ] [백준 16236번](https://www.acmicpc.net/problem/16236)
+- [ ] [백준 1874번](https://www.acmicpc.net/problem/1874)
 
 <br><br>
 <div align="center">
