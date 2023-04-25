@@ -1,7 +1,5 @@
 import java.io.*;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.TreeSet;
+import java.util.*;
 
 public class Main {
 
@@ -9,21 +7,16 @@ public class Main {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
         int n = Integer.parseInt(reader.readLine());
-        TreeSet<Integer> set = new TreeSet<>(new Comparator<Integer>() {
-            @Override
-            public int compare(Integer o1, Integer o2) {
-                return o1.compareTo(o2);
-            }
-        });
+        List<Integer> list = new ArrayList<>();
 
         for (int i = 0; i < n; i++) {
-            set.add(Integer.parseInt(reader.readLine()));
+            list.add(Integer.parseInt(reader.readLine()));
         }
 
         StringBuilder builder = new StringBuilder();
-        Iterator<Integer> iter = set.iterator();
-        while (iter.hasNext()) {
-            builder.append(iter.next()).append("\n");
+        Collections.sort(list);
+        for (int num : list) {
+            builder.append(num).append("\n");
         }
         System.out.println(builder);
     }
