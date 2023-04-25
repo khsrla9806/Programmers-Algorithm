@@ -32,7 +32,10 @@ public class Main {
                 }
             }
 
-            if (slice >= m) {
+            if (slice == m) {
+                answer = mid;
+                break;
+            } else if (slice > m) {
                 min = mid + 1;
                 answer = Math.max(answer, mid);
             } else {
