@@ -20,9 +20,9 @@ public class Main {
             max = Math.max(max, height);
         }
 
-        PriorityQueue<Long> queue = new PriorityQueue<>(Collections.reverseOrder());
         // TODO: 이분탐색 시작
         long mid = 0;
+        long answer = 0;
         while (min <= max) {
             mid = (max + min) / 2;
             long slice = 0;
@@ -34,11 +34,11 @@ public class Main {
 
             if (slice >= m) {
                 min = mid + 1;
-                queue.offer(mid);
+                answer = Math.max(answer, mid);
             } else {
                 max = mid - 1;
             }
         }
-        System.out.println(queue.peek());
+        System.out.println(answer);
     }
 }
