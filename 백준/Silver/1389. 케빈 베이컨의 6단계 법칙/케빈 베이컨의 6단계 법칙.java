@@ -1,5 +1,7 @@
 import java.io.*;
-import java.util.*;
+import java.util.LinkedList;
+import java.util.PriorityQueue;
+import java.util.Queue;
 
 public class Main {
     static int[][] map;
@@ -24,14 +26,14 @@ public class Main {
         PriorityQueue<Person> queue = new PriorityQueue<>();
         for (int i = 1; i <= n; i++) {
             Person person = new Person(i, 0);
-            dfs(person, i, new boolean[n + 1]);
+            bfs(person, i, new boolean[n + 1]);
             queue.offer(person);
         }
 
          System.out.println(queue.poll().number);
     }
 
-    public static void dfs(Person person, int number, boolean[] visited) {
+    public static void bfs(Person person, int number, boolean[] visited) {
         Queue<int[]> queue = new LinkedList<>();
         visited[number] = true;
         queue.offer(new int[]{number, 0});
