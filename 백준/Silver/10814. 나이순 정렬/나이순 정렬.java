@@ -1,21 +1,20 @@
 import java.io.*;
-import java.util.PriorityQueue;
+import java.util.*;
 
 public class Main {
     static int id = 0;
     public static void main(String[] args) throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-        StringBuilder builder = new StringBuilder();
-
         int n = Integer.parseInt(reader.readLine());
         PriorityQueue<Member> members = new PriorityQueue<>();
         for (int i = 0; i < n; i++) {
-            String[] inputData = reader.readLine().split(" ");
-            members.offer(new Member(++id, Integer.parseInt(inputData[0]), inputData[1]));
+            StringTokenizer st = new StringTokenizer(reader.readLine());
+            members.offer(new Member(++id, Integer.parseInt(st.nextToken()), st.nextToken()));
         }
 
+        StringBuilder builder = new StringBuilder();
         while (!members.isEmpty()) {
-            builder.append(members.poll()).append("\n");
+            builder.append(members.poll());
         }
 
         System.out.println(builder);
@@ -43,6 +42,6 @@ class Member implements Comparable<Member> {
 
     @Override
     public String toString() {
-        return this.age + " " + this.name;
+        return this.age + " " + this.name + "\n";
     }
 }
