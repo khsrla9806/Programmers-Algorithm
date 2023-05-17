@@ -1,25 +1,26 @@
 import java.io.*;
+import java.util.*;
 
 public class Main {
-
     public static void main(String[] args) throws IOException {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-        String[] firstLineInput = reader.readLine().split(" ");
-        int n = Integer.parseInt(firstLineInput[0]);
-        int k = Integer.parseInt(firstLineInput[1]);
-        int[] coins = new int[n];
-        for (int i = n - 1; i >= 0; i--) {
-            coins[i] = Integer.parseInt(reader.readLine());
-        }
-
-        int coinCnt = 0;
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        int n = Integer.parseInt(st.nextToken());
+        int money = Integer.parseInt(st.nextToken());
+        int[] moneys = new int[n];
         for (int i = 0; i < n; i++) {
-            int coin = coins[i];
-            if (k / coin != 0) {
-                coinCnt += k / coin;
-                k %= coin;
+            moneys[n - i - 1] = Integer.parseInt(br.readLine());
+        }
+        int answer = 0;
+        int index = 0;
+        while (money > 0) {
+            if (money < moneys[index]) {
+                index++;
+            } else {
+                answer += (money / moneys[index]);
+                money %= moneys[index];
             }
         }
-        System.out.println(coinCnt);
+        System.out.println(answer);
     }
 }
