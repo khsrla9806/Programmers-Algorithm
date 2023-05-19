@@ -1,33 +1,25 @@
 import java.io.*;
-import java.util.HashMap;
+import java.util.Arrays;
 import java.util.StringTokenizer;
 
 public class Main {
-
     public static void main(String[] args) throws IOException {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-        StringBuilder builder = new StringBuilder();
-        StringTokenizer tokenizer;
-        HashMap<String, Integer> map = new HashMap<>();
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-        int n = Integer.parseInt(reader.readLine());
-        tokenizer = new StringTokenizer(reader.readLine(), " ");
-        while (tokenizer.hasMoreTokens()) {
-            String value = tokenizer.nextToken();
-            map.put(value, map.getOrDefault(value, 0) + 1);
+        int n = Integer.parseInt(br.readLine());
+        int[] arrN = new int[n];
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        for (int i = 0; i < n; i++) {
+            arrN[i] = Integer.parseInt(st.nextToken());
         }
-
-        int m = Integer.parseInt(reader.readLine());
-        tokenizer = new StringTokenizer(reader.readLine(), " ");
-        while (tokenizer.hasMoreTokens()) {
-            String value = tokenizer.nextToken();
-            if (map.containsKey(value)) {
-                builder.append(1);
-            } else {
-                builder.append(0);
-            }
-            builder.append("\n");
+        Arrays.sort(arrN);
+        int m = Integer.parseInt(br.readLine());
+        st = new StringTokenizer(br.readLine());
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < m; i++) {
+            int result = Arrays.binarySearch(arrN, Integer.parseInt(st.nextToken()));
+            sb.append(result < 0 ? 0 : 1).append("\n");
         }
-        System.out.println(builder);
+        System.out.println(sb);
     }
 }
