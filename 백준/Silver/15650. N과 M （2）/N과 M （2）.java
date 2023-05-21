@@ -3,6 +3,7 @@ import java.util.*;
 
 public class Main {
     static StringBuilder sb = new StringBuilder();
+    static boolean[] visited;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -10,12 +11,12 @@ public class Main {
         int N = Integer.parseInt(st.nextToken());
         int M = Integer.parseInt(st.nextToken());
 
-        boolean[] visited = new boolean[N + 1];
-        combination(visited, 0, 1, M);
+        visited = new boolean[N + 1];
+        combination(1, 0, M);
         System.out.println(sb);
     }
 
-    public static void combination(boolean[] visited, int count, int start, int M) {
+    public static void combination(int start, int count, int M) {
         if (count == M) {
             for (int i = 1; i < visited.length; i++) {
                 if (visited[i]) {
@@ -23,12 +24,13 @@ public class Main {
                 }
             }
             sb.append("\n");
+            return;
         }
 
         for (int i = start; i < visited.length; i++) {
             if (!visited[i]) {
                 visited[i] = true;
-                combination(visited, count + 1, i + 1, M);
+                combination(i + 1, count + 1, M);
                 visited[i] = false;
             }
         }
