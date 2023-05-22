@@ -15,21 +15,26 @@ public class Main {
         C = Integer.parseInt(st.nextToken());
         T = Integer.parseInt(st.nextToken());
         map = new int[R][C];
-        List<int[]> cleaner = new ArrayList<>(2);
+        int[] top = null; // 반시계 방향
+        int[] bottom = null; // 시계 방향
         for (int i = 0; i < R; i++) {
             st = new StringTokenizer(br.readLine());
             for (int j = 0; j < C; j++) {
                 map[i][j] = Integer.parseInt(st.nextToken());
                 if (map[i][j] == -1) {
-                    cleaner.add(new int[]{i, j});
+                    int[] cors = {i, j};
+                    if (top == null) {
+                        top = cors;
+                    } else {
+                        bottom = cors;
+                    }
                 }
             }
         }
 
-        int[] top = cleaner.get(0); // 청정기 위쪽
-        int[] bottom = cleaner.get(1); // 청정기 아래쪽
+        Queue<int[]> queue;
         for (int i = 0; i < T; i++) {
-            Queue<int[]> queue = new LinkedList<>();
+            queue = new LinkedList<>();
             for (int row = 0; row < R; row++) {
                 for (int col = 0; col < C; col++) {
                     if (map[row][col] >= 5) {
