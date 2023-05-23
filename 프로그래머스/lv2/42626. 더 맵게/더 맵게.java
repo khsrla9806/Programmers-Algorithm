@@ -10,16 +10,11 @@ class Solution {
             queue.offer(number);
         }
 
-        while (!queue.isEmpty()) {
-            if (queue.peek() >= K) {
-                break;
-            }
-            
+        while (queue.peek() < K) {
             if (queue.size() == 1) {
                 answer = -1;
                 break;
             }
-
             queue.offer(queue.poll() + (queue.poll() * 2));
             answer++;
         }
