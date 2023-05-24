@@ -40,7 +40,7 @@ public class Main {
     public static int search(int node) {
         int totalItem = 0;
         visited = new boolean[n + 1];
-        PriorityQueue<Node> queue = new PriorityQueue<>((n1, n2) -> n1.weight - n2.weight);
+        Queue<Node> queue = new LinkedList<>();
         queue.add(new Node(node, 0));
 
         while (!queue.isEmpty()) {
