@@ -1,33 +1,23 @@
 import java.io.*;
+import java.util.*;
 
 public class Main {
-    static int answer, target;
 
     public static void main(String[] args) throws IOException {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-        StringBuilder builder = new StringBuilder();
-        int t = Integer.parseInt(reader.readLine());
-        for (int i = 0; i < t; i++) {
-            answer = 0;
-            target = Integer.parseInt(reader.readLine());
-            for (int j = 1; j <= target; j++) {
-                find(0, 0, j);
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringBuilder sb = new StringBuilder();
+        int T = Integer.parseInt(br.readLine());
+        for (int i = 0; i < T; i++) {
+            int N = Integer.parseInt(br.readLine());
+            int[] dp = new int[N <= 3 ? 4 : N + 1];
+            dp[1] = 1;
+            dp[2] = 2;
+            dp[3] = 4;
+            for (int j = 4; j <= N; j++) {
+                dp[j] = dp[j - 3] + dp[j - 2] + dp[j - 1];
             }
-            builder.append(answer).append("\n");
+            sb.append(dp[N]).append("\n");
         }
-        System.out.println(builder);
-    }
-
-    public static void find(int sum, int cnt, int goal) {
-        if (cnt == goal) {
-            if (sum == target) {
-                answer++;
-            }
-            return;
-        }
-
-        for (int i = 1; i <= 3; i++) {
-            find(sum + i, cnt + 1, goal);
-        }
+        System.out.println(sb);
     }
 }
