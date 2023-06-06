@@ -3,27 +3,20 @@ import java.util.*;
 
 public class Main {
     static int N, M;
-    static int[][] map, sumMap;
+    static int[][] sumMap;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
         N = Integer.parseInt(st.nextToken());
         M = Integer.parseInt(st.nextToken());
-        map = new int[N + 1][N + 1];
         sumMap = new int[N + 1][N + 1];
-        // map 초기화
-        for (int i = 1; i <= N; i++) {
-            st = new StringTokenizer(br.readLine());
-            for (int j = 1; j <= N; j++) {
-                map[i][j] = Integer.parseInt(st.nextToken());
-            }
-        }
 
-        for (int col = 1; col <= N; col++) {
+        for (int row = 1; row <= N; row++) {
             // 가로의 합을 sumMap 갱신
-            for (int row = 1; row <= N; row++) {
-                sumMap[row][col] = sumMap[row][col - 1] + map[row][col];
+            st = new StringTokenizer(br.readLine());
+            for (int col = 1; col <= N; col++) {
+                sumMap[row][col] = sumMap[row][col - 1] + Integer.parseInt(st.nextToken());
             }
         }
 
