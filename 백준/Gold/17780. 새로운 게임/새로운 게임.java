@@ -62,7 +62,7 @@ public class Main {
                     }
 
                     if (isValid(nextCors)) {
-                        LinkedList<Horse> currentList = horseList[currHorse.row][currHorse.col];
+                        LinkedList<Horse> currentList = currHorse.currentLocation;
                         LinkedList<Horse> nextList = horseList[nextCors[0]][nextCors[1]];
 
                         // 흰색
@@ -103,7 +103,7 @@ public class Main {
 
     static class Horse {
         int number, direction, row, col;
-        List<Horse> currentLocation;
+        LinkedList<Horse> currentLocation;
 
         public Horse(int number, int direction, int row, int col) {
             this.number = number;
