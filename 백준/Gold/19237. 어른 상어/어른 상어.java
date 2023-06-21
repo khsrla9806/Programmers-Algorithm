@@ -4,10 +4,8 @@ import java.util.*;
 public class Main {
     static final int[][] DIRECTION = {{}, {-1, 0}, {1, 0}, {0, -1}, {0, 1}};
     static int N, M, K;
-    static int[][] map;
-    static Smell[][] smellMap;
-    static LinkedList<Smell> smellInfo;
-    static LinkedList<Smell> newSmell;
+    static int[][] smells;
+    static int[][] smellLife;
     static Shark[][] sharkMap;
     static ArrayList<Shark> sharkInfo;
 
@@ -17,28 +15,21 @@ public class Main {
         N = Integer.parseInt(st.nextToken());
         M = Integer.parseInt(st.nextToken());
         K = Integer.parseInt(st.nextToken());
-        map = new int[N][N];
-        smellMap = new Smell[N][N];
+        smells = new int[N][N];
+        smellLife = new int[N][N];
         sharkMap = new Shark[N][N];
-        smellInfo = new LinkedList<>();
-        newSmell = new LinkedList<>();
         sharkInfo = new ArrayList<>();
         // 맵 세팅
         for (int row = 0; row < N; row++) {
             st = new StringTokenizer(br.readLine());
             for (int col = 0; col < N; col++) {
                 int number = Integer.parseInt(st.nextToken());
-                map[row][col] = number;
                 if (number > 0) {
                     Shark shark = new Shark(number, row, col);
                     sharkInfo.add(shark);
                     sharkMap[row][col] = shark;
-
-                    // 처음 칸에 냄새를 뿌림
-                    Smell smell = new Smell(shark.number, shark.row, shark.col, K);
-                    map[row][col] = -1;
-                    smellInfo.add(smell);
-                    smellMap[smell.row][smell.col] = smell;
+                    smells[row][col] = shark.number;
+                    smellLife[row][col] = K;
                 }
             }
         }
@@ -73,24 +64,25 @@ public class Main {
                     shark.move(nextCors);
                 }
             }
-            // 냄새 탐색
-            while (!smellInfo.isEmpty()) {
-                Smell smell = smellInfo.poll();
-                smell.life--;
 
-                if (smell.isValid()) {
-                    newSmell.add(smell);
-                } else {
-                    smellMap[smell.row][smell.col] = null;
-                    map[smell.row][smell.col] = 0;
+            // 냄새 탐색
+            for (int row = 0; row < N; row++) {
+                for (int col = 0; col < N; col++) {
+                    if (smells[row][col] != 0) {
+                        smellLife[row][col]--;
+                        if (smellLife[row][col] == 0) {
+                            smells[row][col] = 0;
+                        }
+                    }
                 }
             }
-            // 새로운 냄새를 다시 smellInfo 갱신
-            while (!newSmell.isEmpty()) {
-                Smell smell = newSmell.poll();
-                map[smell.row][smell.col] = -1;
-                smellInfo.add(smell);
-                smellMap[smell.row][smell.col] = smell;
+
+            // 살아있는 상어들의 냄새 뿌리기
+            for (Shark shark : sharkInfo) {
+                if (shark.isAlive) {
+                    smells[shark.row][shark.col] = shark.number;
+                    smellLife[shark.row][shark.col] = K;
+                }
             }
 
             if (M == 1) {
@@ -123,29 +115,15 @@ public class Main {
             sharkMap[row][col] = null;
             row = nextCors[0];
             col = nextCors[1];
-            // 이미 다른 상어가 있는 경우
-            if (sharkMap[row][col] != null) {
-                if (sharkMap[row][col].number < this.number) {
-                    this.isAlive = false;
-                } else {
-                    Shark shark = sharkMap[row][col];
-                    shark.isAlive = false;
-                    sharkMap[row][col] = this;
-                    // 해당 자리에 새로운 냄새를 뿌림 -> 이때 이미 있던 냄새는 제거된다. (다른 상어가 해당 칸에 들어올 수 있음을 의미)
-                    Smell smell = new Smell(number, row, col, K);
-                    newSmell.add(smell);
-                    if (map[row][col] == -1) { // 이미 해당 자리에 냄새가 있었다면, 새롭게 덮어버림 기존 냄새 제거
-                        map[row][col] = 0;
-                        Smell beforeSmell = smellMap[row][col];
-                        smellInfo.remove(beforeSmell);
-                    }
+            if (sharkMap[row][col] == null || sharkMap[row][col].number > number) {
+                if (sharkMap[row][col] != null) {
+                    sharkMap[row][col].isAlive = false;
+                    M--;
                 }
-                M--;
-            } else {
                 sharkMap[row][col] = this;
-                // 해당 자리에 새로운 냄새를 뿌림
-                Smell smell = new Smell(number, row, col, K);
-                newSmell.add(smell);
+            } else {
+                this.isAlive = false;
+                M--;
             }
         }
 
@@ -180,27 +158,11 @@ public class Main {
         }
 
         private boolean isBlank(int[] nextCors) {
-            return map[nextCors[0]][nextCors[1]] == 0;
+            return smells[nextCors[0]][nextCors[1]] == 0;
         }
 
         private boolean isMySmell(int[] nextCors) {
-            return smellMap[nextCors[0]][nextCors[1]].sharkNumber == this.number;
-        }
-    }
-
-    static class Smell {
-        int sharkNumber, row, col;
-        int life;
-
-        public Smell(int sharkNumber, int row, int col, int life) {
-            this.sharkNumber = sharkNumber;
-            this.row = row;
-            this.col = col;
-            this.life = life;
-        }
-
-        public boolean isValid() {
-            return life != 0;
+            return smells[nextCors[0]][nextCors[1]] == this.number;
         }
     }
 }
