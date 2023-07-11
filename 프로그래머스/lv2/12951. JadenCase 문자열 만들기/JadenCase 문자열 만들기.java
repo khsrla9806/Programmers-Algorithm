@@ -1,6 +1,6 @@
 class Solution {
     public String solution(String s) {
-        char[] chars = s.toCharArray();
+        char[] chars = s.toLowerCase().toCharArray();
         
         boolean isFirst = true;
         for (int i = 0; i < chars.length; i++) {
@@ -9,8 +9,6 @@ class Solution {
             } else if (isFirst) {
                 chars[i] = Character.toUpperCase(chars[i]);
                 isFirst = false;
-            } else if (!isFirst) {
-                chars[i] = Character.toLowerCase(chars[i]);
             }
         }
         
