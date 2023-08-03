@@ -12,7 +12,7 @@ class Solution {
             int[] firstCors = {queries[i][0], queries[i][1]};
             int[] secondCors = {queries[i][2], queries[i][3]};
             
-            List<int[]> borderCors = findBorderCors(firstCors, secondCors);
+            LinkedList<int[]> borderCors = findBorderCors(firstCors, secondCors);
             
             int answerValue = turnBorder(borderCors);
             answer[i] = answerValue;
@@ -32,8 +32,8 @@ class Solution {
     }
     
     /** @returns 테두리 좌표 리스트 반환  */
-    private List<int[]> findBorderCors(int[] firstCors, int[] secondCors) {
-        List<int[]> result = new ArrayList<>();
+    private LinkedList<int[]> findBorderCors(int[] firstCors, int[] secondCors) {
+        LinkedList<int[]> result = new LinkedList<>();
         
         int curRow = firstCors[0];
         int curCol = firstCors[1];
@@ -67,19 +67,20 @@ class Solution {
     }
     
     /** @returns 테두리 회전 후 변동 값 중에 최소값 반환 */
-    private int turnBorder(List<int[]> borderCors) {
-        int[] firstCors = borderCors.get(0);
-        int[] lastCors = borderCors.get(borderCors.size() - 1); 
-        int before = map[firstCors[0]][firstCors[1]];
-        map[firstCors[0]][firstCors[1]] = map[lastCors[0]][lastCors[1]];
+    private int turnBorder(LinkedList<int[]> borderCors) {
+        int[] first = borderCors.pollFirst();
+        int[] last = borderCors.peekLast();
+        int before = map[first[0]][first[1]];
         int minValue = before;
         
-        for (int i = 1; i < borderCors.size(); i++) {
-            int[] curCors = borderCors.get(i);
-            int currentValue = map[curCors[0]][curCors[1]];
-            minValue = Math.min(minValue, currentValue);
-            map[curCors[0]][curCors[1]] = before;
+        map[first[0]][first[1]] = map[last[0]][last[1]];
+        
+        while (!borderCors.isEmpty()) {
+            int[] cors = borderCors.poll();
+            int currentValue = map[cors[0]][cors[1]];
+            map[cors[0]][cors[1]] = before;
             before = currentValue;
+            minValue = Math.min(minValue, currentValue);
         }
         
         return minValue;
