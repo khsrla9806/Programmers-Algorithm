@@ -18,15 +18,15 @@ public class Main {
             nicknameCounts.insert(nickname);
 
             int matchedLastIndex = trie.searchMatchLastIndex(nickname);
-            if (matchedLastIndex == nickname.length() - 1) { // 포함되어 있는 단어
+            if (matchedLastIndex == nickname.length() - 1) { // 이미 trie 안에 포함 되어 있는 단어
                 int x = nicknameCounts.getCount(nickname);
                 answer.append(nickname).append(x > 1 ? x : BLANK).append(NEW_LINE);
-            } else if (matchedLastIndex > -1) { // 겹치는 prefix 존재
+            } else if (matchedLastIndex > -1) { // trie 안에 겹치는 prefix 존재
                 answer.append(nickname, 0, matchedLastIndex + 2).append(NEW_LINE);
-            } else if (matchedLastIndex == -1) { // 겹치는 prefix 없음
+            } else if (matchedLastIndex == -1) { // trie 안에 겹치는 prefix 없음
                 answer.append(nickname.charAt(0)).append(NEW_LINE);
             }
-            
+
             trie.insert(nickname);
         }
         System.out.println(answer);
@@ -73,22 +73,6 @@ class Trie {
         }
         return index;
     }
-
-    public boolean contains(String word) {
-        TrieNode node = rootNode;
-        for (char ch : word.toCharArray()) {
-            node = node.childNodes.getOrDefault(ch, null);
-
-            if (node == null) {
-                return false;
-            }
-        }
-        return node.isTerminated; // last character -> contains word in trie -> true
-    }
-
-    public boolean isEmpty() {
-        return rootNode.childNodes.isEmpty();
-    }
 }
 
 class NicknameCounts {
@@ -108,9 +92,5 @@ class NicknameCounts {
 
     public int getCount(String nickname) {
         return nicknameCounts.getOrDefault(nickname, 0);
-    }
-
-    public boolean contains(String nickname) {
-        return nicknameCounts.containsKey(nickname);
     }
 }
