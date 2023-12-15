@@ -1,8 +1,6 @@
 import java.io.*;
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.PriorityQueue;
 
 public class Main {
@@ -63,12 +61,15 @@ class Value implements Comparable<Value> {
             String valueOfThis = this.seperatedValue.get(i);
             String valueOfOther = seperatedValueOfOther.get(i);
 
-            BigDecimal decimalOfThis = convertToDecimal(valueOfThis);
-            BigDecimal decimalOfOther = convertToDecimal(valueOfOther);
+            boolean isNumberOfThis = isNumber(valueOfThis);
+            boolean isNumberOfOther = isNumber(valueOfOther);
 
             // 둘 다 숫자인 경우
-            if (decimalOfThis != null && decimalOfOther != null) {
-                if (decimalOfThis.compareTo(decimalOfOther) == 0) {
+            if (isNumberOfThis && isNumberOfOther) {
+                BigDecimal decimalOfThis = convertToDecimal(valueOfThis);
+                BigDecimal decimalOfOther = convertToDecimal(valueOfOther);
+
+                if (decimalOfThis.equals(decimalOfOther)) {
                     // 값도 같고, 0의 개수도 같은 경우
                     if (valueOfThis.length() == valueOfOther.length()) {
                         continue;
@@ -79,54 +80,47 @@ class Value implements Comparable<Value> {
             }
 
             // 둘 중 하나만 숫자인 경우
-            if (decimalOfThis != null || decimalOfOther != null) {
-                return decimalOfThis != null ? -1 : 1;
+            if (isNumberOfThis || isNumberOfOther) {
+                return isNumberOfThis ? -1 : 1;
             }
 
             // 둘 다 문자인 경우
-            int priorityOfThis = AlphabetComputer.getPriority(valueOfThis);
-            int priorityOfOther = AlphabetComputer.getPriority(valueOfOther);
+            int comparedValue = compare(valueOfThis, valueOfOther);
 
-            if (priorityOfThis == priorityOfOther) {
+            if (comparedValue == 0) {
                 continue;
             }
 
-            return priorityOfThis - priorityOfOther;
+            return comparedValue;
         }
 
         return this.value.length() - other.value.length();
     }
 
-    private BigDecimal convertToDecimal(String value) {
-        try {
-            return new BigDecimal(value);
-        } catch (NumberFormatException e) {
-            return null;
+    private int compare(String value1, String value2) {
+        if (value1.equals(value2)) {
+            return 0;
         }
+        if (value1.equalsIgnoreCase(value2)) {
+            if (value1.toUpperCase().compareTo(value1) == 0) {
+                return -1;
+            }
+            return 1;
+        }
+
+        return value1.compareToIgnoreCase(value2);
+    }
+
+    private boolean isNumber(String value) {
+        return Character.isDigit(value.charAt(0));
+    }
+
+    private BigDecimal convertToDecimal(String value) {
+        return new BigDecimal(value);
     }
 
     @Override
     public String toString() {
         return value;
-    }
-}
-
-class AlphabetComputer {
-    static Map<String, Integer> alphabetPriority = new HashMap<>();
-
-    static {
-        int priority = 0;
-        int aCode = 'a';
-        int zCode = 'z';
-        for (int i = aCode; i <= zCode; i++) {
-            char ch = (char) i;
-            String alphabet = String.valueOf(ch);
-            alphabetPriority.put(alphabet.toUpperCase(), priority++);
-            alphabetPriority.put(alphabet, priority++);
-        }
-    }
-
-    public static int getPriority(String alphabet) {
-        return alphabetPriority.get(alphabet);
     }
 }
