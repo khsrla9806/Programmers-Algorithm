@@ -23,6 +23,9 @@ public class Main {
                 sum += numbers[end];
                 end++;
             }
+            if (end >= N && sum < M) {
+                break;
+            }
             if (sum == M) {
                 answer++;
             }
