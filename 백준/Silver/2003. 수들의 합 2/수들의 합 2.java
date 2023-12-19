@@ -11,29 +11,24 @@ public class Main {
         String[] inputNumbers = reader.readLine().split(" ");
         for (int i = 0; i < N; i++) {
             numbers[i] = Integer.parseInt(inputNumbers[i]);
-
-            if (i > 0) {
-                numbers[i] += numbers[i - 1];
-            }
         }
 
         int answer = 0;
-        for (int i = 0; i < N; i++) {
-            for (int j = i; j < N; j++) {
-                int result;
-                if (i == 0) {
-                    result = numbers[j];
-                } else {
-                    result = numbers[j] - numbers[i - 1];
-                }
-                if (result > M) {
-                    break;
-                }
-                if (result == M) {
-                    answer++;
-                }
+        int start = 0;
+        int end = 0;
+        int sum = 0;
+
+        while (start < N) {
+            while (end < N && sum < M) {
+                sum += numbers[end];
+                end++;
             }
+            if (sum == M) {
+                answer++;
+            }
+            sum -= numbers[start++];
         }
+
         System.out.println(answer);
     }
 }
