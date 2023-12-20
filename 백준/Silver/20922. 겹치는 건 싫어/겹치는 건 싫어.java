@@ -19,7 +19,7 @@ public class Main {
         int N = Integer.parseInt(firstLineInput[0]);
         int K = Integer.parseInt(firstLineInput[1]);
         int[] numbers = Arrays.stream(secondLineInput).mapToInt(Integer::valueOf).toArray();
-        Map<Integer, Integer> duplicatedCounts = new HashMap<>();
+        int[] duplicatedCounts = new int[100001];
 
         // step 3. start two pointer
         int start = 0;
@@ -30,22 +30,17 @@ public class Main {
 
             while (start < end && !isValid(duplicatedCounts, K, number)) {
                 int tempNumber = numbers[start++];
-                int tempDuplicatedCount = duplicatedCounts.get(tempNumber);
-                if (tempDuplicatedCount - 1 == 0) {
-                    duplicatedCounts.remove(tempNumber);
-                } else {
-                    duplicatedCounts.put(tempNumber, tempDuplicatedCount - 1);
-                }
+                duplicatedCounts[tempNumber]--;
                 length--;
             }
-            duplicatedCounts.put(number, duplicatedCounts.getOrDefault(number, 0) + 1);
+            duplicatedCounts[number]++;
             length++;
             answer = Math.max(answer, length);
         }
         System.out.println(answer);
     }
 
-    private static boolean isValid(Map<Integer, Integer> duplicatedCounts, int K, int number) {
-        return duplicatedCounts.getOrDefault(number, 0) + 1 <= K;
+    private static boolean isValid(int[] duplicatedCounts, int K, int number) {
+        return duplicatedCounts[number] + 1 <= K;
     }
 }
