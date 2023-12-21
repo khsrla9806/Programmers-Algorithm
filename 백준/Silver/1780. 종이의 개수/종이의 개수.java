@@ -24,9 +24,7 @@ public class Main {
         search(new int[]{1, 1}, N);
 
         // step 3. print answer
-        System.out.println(minusCount);
-        System.out.println(zeroCount);
-        System.out.println(plusCount);
+        System.out.println(minusCount + "\n" + zeroCount + "\n" + plusCount);
     }
 
     private static void search(int[] startCors, int k) {
