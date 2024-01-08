@@ -3,48 +3,85 @@ import java.util.*;
 class Solution {
     public int[] solution(int[][] edges) {
         int[] answer = new int[4];
-        List<Integer>[] adjList = new ArrayList[1000001];
-        int[][] inNout = new int[1000001][3];
-        for(int[] edge : edges){
-            int a = edge[0];
-            int b = edge[1];
-            inNout[a][0]++;
-            inNout[b][1]++;
-            inNout[a][2] = 1;
-            inNout[b][2] = 1;
-            // a->b연결관계 표시
-            if(adjList[a] == null){
-                adjList[a] = new ArrayList<Integer>();
-                adjList[a].add(b);
-            }
-            else adjList[a].add(b);
-        }
-        int idx = 0;
-        for(int i=0; i<1000001; i++){
-            //들어오는 간선은 없지만 나가는 간선이 2이상이면 생성된 정점
-            if(inNout[i][1] == 0 && inNout[i][0] >=2){
-                idx = i;
-                answer[0] = i;
-            }
-        }
-        //생성된 정점과 연결된 정점들 in 간선 감소시켜주기
-        int totalCount = 0; //전체 모양 그래프 개수
-        for(int x : adjList[idx]){
-            inNout[x][1]--;
-            totalCount++;
-        }
-        inNout[idx][0] = 0;
-        inNout[idx][1] = 0;
-        inNout[idx][2] = 0;
-        for(int i=0; i<1000001; i++){
-            //막대 그래프
-            if(inNout[i][1] == 0 && inNout[i][2] ==1)answer[2]++;
 
-            //8자모양 그래프
-            if(inNout[i][1] == 2 && inNout[i][0]==2) answer[3]++;
+        // step 1. 그래프 간선 정보 설정 및 In/Out Count 정보 설정
+        Node[] map = new Node[1000001];
+
+        for (int[] edge : edges) {
+            int from = edge[0];
+            int to = edge[1];
+            if (map[from] == null) map[from] = new Node(from);
+            if (map[to] == null) map[to] = new Node(to);
+            map[from].outNodes.add(map[to]);
+            map[from].outCount++;
+            map[to].inCount++;
         }
-        answer[1] = totalCount - (answer[2] + answer[3]);
+
+        // step 2. 생성된 정점 찾기
+        Node createdNode = null;
+        for (Node node : map) {
+            if (node != null && node.inCount == 0 && node.outCount >= 2) {
+                answer[0] = node.number;
+                createdNode = node;
+                break;
+            }
+        }
+
+        // step 3. 생성된 정점에서 부터 그래프 탐색 시작
+        int totalGraphCount = createdNode.outCount;
+
+        for (Node node : createdNode.outNodes) {
+            search(node, answer);
+        }
+
+        // step 4. 도넛 그래프 = 전체 그래프 수 - (막대 그래프 + 8자 그래프)
+        answer[1] = totalGraphCount - (answer[2] + answer[3]);
 
         return answer;
+    }
+
+    private void search(Node node, int[] answer) {
+        node.isVisited = true;
+
+        // 해당 노드가 8자 그래프인 경우
+        if (node.inCount >= 2 && node.outCount == 2) {
+            answer[3]++;
+            return;
+        }
+
+        Node nextNode = node.getNextNode();
+        if (nextNode == null) {
+            // 막대 그래프인 경우 = 마지막 노드의 outCount가 0일때
+            if (node.outCount == 0) {
+                answer[2]++;
+            }
+            return;
+        }
+
+        search(nextNode, answer);
+    }
+}
+
+class Node {
+    int number;
+    int outCount;
+    int inCount;
+    int outNodesIdx;
+    boolean isVisited;
+    List<Node> outNodes;
+
+    public Node(int number) {
+        this.number = number;
+        this.outNodes = new ArrayList<>();
+    }
+
+    public Node getNextNode() {
+        while (outNodesIdx < outNodes.size()) {
+            Node node = outNodes.get(outNodesIdx++);
+            if (!node.isVisited) {
+                return node;
+            }
+        }
+        return null;
     }
 }
