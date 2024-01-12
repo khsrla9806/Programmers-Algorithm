@@ -5,6 +5,7 @@ import java.io.BufferedReader;
 public class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        StringBuilder builder = new StringBuilder();
 
         for (int testCase = 1; ; testCase++) {
             String[] command = reader.readLine().split(" ");
@@ -16,7 +17,8 @@ public class Main {
             int V = Integer.parseInt(command[2]);
             int answer = (V / P) * L + Math.min(V % P, L);
 
-            System.out.printf("Case %d: %d\n", testCase, answer);
+            builder.append("Case ").append(testCase).append(": ").append(answer).append("\n");
         }
+        System.out.println(builder);
     }
 }
