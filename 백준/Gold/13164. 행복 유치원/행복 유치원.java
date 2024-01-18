@@ -1,7 +1,7 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Arrays;
+import java.util.PriorityQueue;
 import java.util.StringTokenizer;
 
 public class Main {
@@ -18,16 +18,17 @@ public class Main {
         }
 
         // step 2. 학생들 사이의 키 차이를 구해서 저장 (오른쪽 학생이 항상 왼쪽 학생보다 큼)
-        int[] diff = new int[N - 1];
+        PriorityQueue<Integer> queue = new PriorityQueue<>();
         for (int i = 1; i < N; i++) {
-            diff[i - 1] = students[i] - students[i - 1];
+            queue.offer(students[i] - students[i - 1]);
         }
 
-        // step 3. diff를 정렬하여 차이가 큰 것부터 k-1개를 제거하여 정답 도출
+        // step 3. diff를 정렬하여 차이가 큰 것부터 k-1개를 제거
         int answer = 0;
-        Arrays.sort(diff);
-        for (int i = 0; i < diff.length - (K - 1); i++) {
-            answer += diff[i];
+        for (int i = 0; i < N - K; i++) {
+            if (!queue.isEmpty()) {
+                answer += queue.poll();
+            }
         }
         System.out.println(answer);
     }
