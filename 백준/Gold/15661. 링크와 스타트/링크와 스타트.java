@@ -29,18 +29,22 @@ public class Main {
     }
 
     private static void combination(boolean[] visited, int start, int r) {
+        if (answer == 0) return;
         if (r == 0) {
-            ArrayList<Integer> startTeam = new ArrayList<>();
-            ArrayList<Integer> linkTeam = new ArrayList<>();
+            int startTeam = 0;
+            int linkTeam = 0;
 
-            for (int i = 1; i <= N; i++) {
-                if (visited[i]) {
-                    startTeam.add(i);
-                } else {
-                    linkTeam.add(i);
+            for (int i = 1; i <= N - 1; i++) {
+                for (int j = i; j <= N; j++) {
+                    if (visited[i] && visited[j]) {
+                        startTeam += map[i][j] + map[j][i];
+                    } else if (!visited[i] && !visited[j]) {
+                        linkTeam += map[i][j] + map[j][i];
+                    }
                 }
             }
-            answer = Math.min(answer, Math.abs(getScore(startTeam) - getScore(linkTeam)));
+
+            answer = Math.min(answer, Math.abs(startTeam - linkTeam));
             return;
         }
         for (int i = start; i <= N; i++) {
@@ -48,17 +52,5 @@ public class Main {
             combination(visited, i + 1, r - 1);
             visited[i] = false;
         }
-    }
-
-    private static int getScore(List<Integer> team) {
-        int score = 0;
-        for (int i = 0; i < team.size() - 1; i++) {
-            for (int j = i + 1; j < team.size(); j++) {
-                int firstValue = team.get(i);
-                int secondValue = team.get(j);
-                score += map[firstValue][secondValue] + map[secondValue][firstValue];
-            }
-        }
-        return score;
     }
 }
