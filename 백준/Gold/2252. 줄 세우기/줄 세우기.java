@@ -16,16 +16,19 @@ public class Main {
             nodes[i] = new Node(i + 1);
         }
 
+        // 진입 차수를 설정
         for (int i = 0; i < M; i++) {
             String[] priorityInfo = reader.readLine().split(" ");
-            int firstIdx = Integer.parseInt(priorityInfo[0]) - 1;
-            int secondIdx = Integer.parseInt(priorityInfo[1]) - 1;
-            nodes[secondIdx].degree++;
-            nodes[firstIdx].linkedNodes.add(nodes[secondIdx]);
+            Node firstNode = nodes[Integer.parseInt(priorityInfo[0]) - 1];
+            Node secondNode = nodes[Integer.parseInt(priorityInfo[1]) - 1];
+            firstNode.linkedNodes.add(secondNode);
+            secondNode.degree++;
         }
 
+        // 위상정렬 시작
         StringBuilder answerBuilder = new StringBuilder();
         Queue<Node> answerQueue = new LinkedList<>();
+        // 진입차수가 0인 노드를 모두 큐에 넣음
         for (Node n : nodes) {
             if (n.degree == 0) {
                 answerQueue.add(n);
@@ -34,10 +37,9 @@ public class Main {
 
         while (!answerQueue.isEmpty()) {
             Node node = answerQueue.poll();
-            answerBuilder.append(node.value).append(" ");
+            answerBuilder.append(node.value).append(" "); // 큐에서 뽑은 순서대로 정답에 넣음
             node.linkedNodes.forEach(n -> {
-                n.degree--;
-                if (n.degree == 0) answerQueue.add(n);
+                if (--n.degree == 0) answerQueue.add(n); // 연결된 부분을 끊어주면서 진입차수를 감소시킨 차수가 0이면 큐에 넣음
             });
         }
 
@@ -45,7 +47,7 @@ public class Main {
     }
 }
 
-class Node implements Comparable<Node> {
+class Node {
     int value;
     int degree;
     List<Node> linkedNodes;
@@ -53,9 +55,5 @@ class Node implements Comparable<Node> {
     public Node(int value) {
         this.value = value;
         this.linkedNodes = new ArrayList<>();
-    }
-
-    public int compareTo(Node other) {
-        return this.degree - other.degree;
     }
 }
