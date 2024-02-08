@@ -26,13 +26,15 @@ public class Main {
         int result = checkSameSquare(row, col, n);
 
         if (result == -1) {
-            return String.format(
-                    "(%s%s%s%s)",
-                    search(row, col, half),
-                    search(row, col + half, half),
-                    search(row + half, col, half),
-                    search(row + half, col + half, half)
-            );
+            StringBuilder builder = new StringBuilder()
+                    .append("(")
+                    .append(search(row, col, half))
+                    .append(search(row, col + half, half))
+                    .append(search(row + half, col, half))
+                    .append(search(row + half, col + half, half))
+                    .append(")");
+
+            return builder.toString();
         }
 
         return String.valueOf(result);
